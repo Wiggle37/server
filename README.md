@@ -1,2 +1,2 @@
-# server
-Server for my [website](https://github.com/Wiggle37/website)
+# Website
+API for the backend of my website
