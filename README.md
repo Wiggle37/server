@@ -1,2 +1,3 @@
 # Website
-API for the backend of my website
+
+API server for MongoDB to use for my [website](https://github.com/wiggle37/website)
