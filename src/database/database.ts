@@ -1,5 +1,8 @@
+import * as path from "path";
 import { MongoClient } from "mongodb";
-require("dotenv").config();
+
+const envPath = path.resolve(__dirname, "../.env")
+require("dotenv").config({ path: envPath });
 
 const client: MongoClient = new MongoClient(process.env.MONGO_URI);
 

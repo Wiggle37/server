@@ -1,9 +1,9 @@
 import * as fs from "fs";
+import * as path from "path";
 import express from "express";
 import cors from "cors";
 import { connect, disconnect } from "./database/database";
 import { Logger } from "./lib/logger";
-require("dotenv").config({ path: "./.env" });
 
 const logger: Logger = new Logger("server")
 
@@ -11,8 +11,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-for (const file of fs.readdirSync("./routes")) {
-    for (const endpoint of fs.readdirSync(`./routes/${file}`)) {
+const routersPath = path.resolve(__dirname, "./routes")
+for (const file of fs.readdirSync(routersPath)) {
+    const filePath = path.resolve(__dirname, `./routes/${file}`)
+    for (const endpoint of fs.readdirSync(filePath)) {
         if (!endpoint.endsWith(".js")) continue;
         const _endpoint = require(`./routes/${file}/${endpoint}`);
         if (_endpoint.name == undefined || _endpoint.router == undefined) {
