@@ -4,7 +4,7 @@ import { MongoClient } from "mongodb";
 const envPath = path.resolve(__dirname, "../.env")
 require("dotenv").config({ path: envPath });
 
-const client: MongoClient = new MongoClient(process.env.MONGO_URI);
+const client: MongoClient = new MongoClient(process.env.MONGO_URI || "");
 
 export async function connect() {
     client.connect();

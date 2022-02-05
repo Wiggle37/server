@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "strict": true,
     "module": "commonjs",
     "allowJs": true,
     "esModuleInterop": true,
@@ -11,7 +12,7 @@
   "include": [
     "./src/",
     "./.env"
-  ],
+, "src/routes/accounts/deleteAccount.ts"  ],
   "exclude": [
     "node_modules",
     "dist"

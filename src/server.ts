@@ -38,7 +38,7 @@ app.listen(8080, async () => {
         await connect();
         logger.debug("Mongo Server Running on http://127.0.0.1:8080");
 
-    } catch (err) {
+    } catch (err: any) {
         logger.fatal(`There was an error while running the server:\n${err.stack}`)
         logger.debug("Closing Mongo Server...");
         await disconnect();
