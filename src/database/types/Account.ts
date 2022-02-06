@@ -3,6 +3,5 @@ export interface Account {
     phoneNumber: number,
     firstName: string,
     lastName: string,
-    age: number,
     password: string
 }

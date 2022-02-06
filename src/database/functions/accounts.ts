@@ -1,6 +1,6 @@
 import { Collection } from "mongodb";
 import { getDatabase } from "../database";
-import { Account } from "../abstract/account"
+import { Account } from "../types/account"
 
 async function getCollection() : Promise<Collection> {
     const db = await getDatabase();
@@ -27,6 +27,7 @@ export async function initUser(data: Account) : Promise<number> {
 
     return new Promise(async (resolve, reject) => {
         if (await checkForUser(data.email)) return reject({ status: 500, error: `User with email '${data.email}' already exists!` });
+        if (data.email || data.phoneNumber || data.firstName || data.lastName || data.password == (undefined)) return reject({ status: 500, error: "Data object missing item!" })
         await database.insertOne(data).then(() => {
             resolve(200);
         }).catch((err) => {

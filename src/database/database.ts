@@ -6,15 +6,15 @@ require("dotenv").config({ path: envPath });
 
 const client: MongoClient = new MongoClient(process.env.MONGO_URI || "");
 
-export async function connect() {
+export async function connect() : Promise<void> {
     client.connect();
 }
 
-export async function disconnect() {
+export async function disconnect() : Promise<void> {
     await client.close();
 }
 
-export async function getDatabase() {
+export async function getDatabase() : Promise<any> {
     client.connect();
     
     const database = client.db("website")
