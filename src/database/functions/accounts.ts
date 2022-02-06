@@ -1,6 +1,7 @@
+/* eslint-disable no-async-promise-executor */
 import { Collection } from "mongodb";
 import { getDatabase } from "../database";
-import { Account } from "../types/account"
+import { Account } from "../types/account";
 
 async function getCollection() : Promise<Collection> {
     const db = await getDatabase();
@@ -27,7 +28,7 @@ export async function initUser(data: Account) : Promise<number> {
 
     return new Promise(async (resolve, reject) => {
         if (await checkForUser(data.email)) return reject({ status: 500, error: `User with email '${data.email}' already exists!` });
-        if (data.email || data.phoneNumber || data.firstName || data.lastName || data.password == (undefined)) return reject({ status: 500, error: "Data object missing item!" })
+        if (data.email || data.phoneNumber || data.firstName || data.lastName || data.password == (undefined)) return reject({ status: 500, error: "Data object missing item!" });
         await database.insertOne(data).then(() => {
             resolve(200);
         }).catch((err) => {
@@ -36,7 +37,7 @@ export async function initUser(data: Account) : Promise<number> {
     });
 }
 
-export async function getUserData(email: string) : Promise<any> {
+export async function getUserData(email: string) : Promise<unknown> {
     const database = await getCollection();
 
     return new Promise(async (resolve, reject) => {

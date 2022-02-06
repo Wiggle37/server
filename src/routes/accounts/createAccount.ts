@@ -1,13 +1,17 @@
 import { Router } from "express";
 import { initUser } from "../../database/functions/accounts";
+import { Logger } from "../../lib/Logger";
 
+const logger: Logger = new Logger("createAccount");
 const _router: Router = Router();
 
-export const name: string = "createAccount"
+export const name = "createAccount";
 export const router = _router.post("/", async (req, res) => {
     await initUser(req.body).then((response) => {
-        res.send({ response: response })
+        res.send({ response: response });
+        logger.debug("Excecuted 'createAccount' without error");
     }).catch((err) => {
         res.send({ response: err });
+        logger.error("");
     });
 });
