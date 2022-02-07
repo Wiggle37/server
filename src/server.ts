@@ -5,14 +5,23 @@ import express from "express";
 import cors from "cors";
 import { connect, disconnect } from "./database/database";
 import { Logger } from "./lib/logger";
+import dotenv from "dotenv";
+dotenv.config();
 
+export const routes = new Map<string, object>();
+
+const port = process.env.PORT || 3000;
 const logger: Logger = new Logger("server");
 
+logger.info("Creating express server...");
 const app = express();
+
 app.use(cors());
 app.use(express.json());
 
+logger.info("Loading routes...");
 for (const file of fs.readdirSync(path.resolve(__dirname, "./routes"))) {
+    const routeList = [];
     for (const endpoint of fs.readdirSync(path.resolve(__dirname, `./routes/${file}`))) {
         if (!endpoint.endsWith(".js")) continue;
         const _endpoint = require(`./routes/${file}/${endpoint}`);
@@ -22,8 +31,13 @@ for (const file of fs.readdirSync(path.resolve(__dirname, "./routes"))) {
         }
 
         app.use(`/${file}/${_endpoint.name}/`, _endpoint.router);
+        routeList.push({
+            name: _endpoint.name,
+            path: `/${file}/${_endpoint.name}/`
+        });
         logger.debug(`Loaded route "/${file}/${_endpoint.name}/"`);
     }
+    routes.set(file.toString(), routeList);
 }
 
 app.get("/", (req, res) => {
@@ -32,13 +46,13 @@ app.get("/", (req, res) => {
     });
 });
 
-app.listen(8080, async () => {
+app.listen(port, async () => {
     try {
         await connect();
-        logger.debug("Mongo Server Running on http://127.0.0.1:8080");
+        logger.info(`Server running on http://127.0.0.1:${port}`);     
 
     } catch (err) {
-        logger.fatal(`There was an error while running the server:\n${JSON.stringify(err)}`); // dont open an issue about this, literally coulnt find a fix
+        logger.fatal(`There was an error while running the server:\n${err}`);
         logger.debug("Closing Mongo Server...");
         await disconnect();
         logger.debug("Mongo Server Closed.");
