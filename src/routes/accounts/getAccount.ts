@@ -9,7 +9,6 @@ export const name = "getAccount";
 export const router = _router.get("/:email", async (req, res) => {
     await getUserData(req.params.email).then((response) => {
         res.send({ response: response });
-        logger.debug("Excecuted 'getAccount' without error");
     }).catch((err) => {
         res.send({ response: err });
         logger.error(`Error excecuting 'getAccount':\nStatus: ${err.status}\nError: ${err.error}`);

@@ -18,5 +18,4 @@ export const router = _router.get("/", async (req, res) => {
     res.send({
         response: _routes
     });
-    logger.debug("Excecuted 'routes' without error");
 });

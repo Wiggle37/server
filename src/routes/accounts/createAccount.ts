@@ -9,9 +9,8 @@ export const name = "createAccount";
 export const router = _router.post("/", async (req, res) => {
     await initUser(req.body).then((response) => {
         res.send({ response: response });
-        logger.debug("Excecuted 'createAccount' without error");
     }).catch((err) => {
         res.send({ response: err });
-        logger.error("");
+        logger.error(`Error excecuting 'createAccount':\nStatus: ${err.status}\nError: ${err.error}`);
     });
 });
