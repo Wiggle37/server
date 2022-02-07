@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 import * as fs from "fs";
 import * as path from "path";
 import express from "express";
@@ -5,16 +6,14 @@ import cors from "cors";
 import { connect, disconnect } from "./database/database";
 import { Logger } from "./lib/logger";
 
-const logger: Logger = new Logger("server")
+const logger: Logger = new Logger("server");
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-const routersPath = path.resolve(__dirname, "./routes")
-for (const file of fs.readdirSync(routersPath)) {
-    const filePath = path.resolve(__dirname, `./routes/${file}`)
-    for (const endpoint of fs.readdirSync(filePath)) {
+for (const file of fs.readdirSync(path.resolve(__dirname, "./routes"))) {
+    for (const endpoint of fs.readdirSync(path.resolve(__dirname, `./routes/${file}`))) {
         if (!endpoint.endsWith(".js")) continue;
         const _endpoint = require(`./routes/${file}/${endpoint}`);
         if (_endpoint.name == undefined || _endpoint.router == undefined) {
@@ -23,14 +22,14 @@ for (const file of fs.readdirSync(routersPath)) {
         }
 
         app.use(`/${file}/${_endpoint.name}/`, _endpoint.router);
-        logger.debug(`Loaded route "/${file}/${_endpoint.name}/"`)
+        logger.debug(`Loaded route "/${file}/${_endpoint.name}/"`);
     }
 }
 
 app.get("/", (req, res) => {
     res.send({
         response: "Please provide a valid endpoint!"
-    })
+    });
 });
 
 app.listen(8080, async () => {
@@ -38,8 +37,8 @@ app.listen(8080, async () => {
         await connect();
         logger.debug("Mongo Server Running on http://127.0.0.1:8080");
 
-    } catch (err: any) {
-        logger.fatal(`There was an error while running the server:\n${err.stack}`)
+    } catch (err) {
+        logger.fatal(`There was an error while running the server:\n${JSON.stringify(err)}`); // dont open an issue about this, literally coulnt find a fix
         logger.debug("Closing Mongo Server...");
         await disconnect();
         logger.debug("Mongo Server Closed.");
