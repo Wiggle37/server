@@ -6,11 +6,11 @@ dotenv.config({ path: path.resolve(__dirname, "../.env") });
 
 const client: MongoClient = new MongoClient(process.env.MONGO_URI || "");
 
-export async function connect() : void {
+export async function connect() : Promise<void> {
     client.connect();
 }
 
-export async function disconnect() : void {
+export async function disconnect() : Promise<void> {
     await client.close();
 }
 

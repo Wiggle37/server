@@ -46,10 +46,10 @@ app.get("/", (req, res) => {
     });
 });
 
-app.listen(port, async () => {
+app.listen(3000, async () => {
     try {
         await connect();
-        logger.info(`Server running on http://127.0.0.1:${port}`);     
+        logger.info(`Server running on http://localhost:${port}`);     
 
     } catch (err) {
         logger.fatal(`There was an error while running the server:\n${err}`);
