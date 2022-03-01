@@ -8,8 +8,7 @@ import { Logger } from "./lib/logger";
 import dotenv from "dotenv";
 dotenv.config();
 
-console.time("StartTime");
-
+const startTimer: number = Date.now();
 export const routes = new Map<string, object>();
 
 const port = process.env.PORT || 3000;
@@ -22,6 +21,7 @@ app.use(cors());
 app.use(express.json());
 
 logger.info("Loading routes...");
+let routeCount = 0;
 for (const file of fs.readdirSync(path.resolve(__dirname, "./routes"))) {
     const routeList = [];
     for (const endpoint of fs.readdirSync(path.resolve(__dirname, `./routes/${file}`))) {
@@ -38,6 +38,7 @@ for (const file of fs.readdirSync(path.resolve(__dirname, "./routes"))) {
             path: `/${file}/${_endpoint.name}/`
         });
         logger.debug(`Loaded route "/${file}/${_endpoint.name}/"`);
+        routeCount++;
     }
     routes.set(file.toString(), routeList);
 }
@@ -48,17 +49,16 @@ app.get("/", (req, res) => {
     });
 });
 
-app.listen(3000, async () => {
+app.listen(port, async () => {
     try {
         await connect();
-        logger.info(`Server running on http://localhost:${port}`);   
-        console.timeEnd("StartTime");
+        logger.info(`Server running on http://localhost:${port}`);
+        logger.debug(`Loaded ${routeCount} routes in ${Date.now() - startTimer}ms`);
 
     } catch (err) {
         logger.fatal(`There was an error while running the server:\n${err}`);
         logger.debug("Closing Mongo Server...");
         await disconnect();
-        logger.debug("Mongo Server Closed.");
         process.exit(1);
     }
 });
