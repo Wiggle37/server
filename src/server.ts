@@ -8,6 +8,8 @@ import { Logger } from "./lib/logger";
 import dotenv from "dotenv";
 dotenv.config();
 
+console.time("StartTime");
+
 export const routes = new Map<string, object>();
 
 const port = process.env.PORT || 3000;
@@ -49,7 +51,8 @@ app.get("/", (req, res) => {
 app.listen(3000, async () => {
     try {
         await connect();
-        logger.info(`Server running on http://localhost:${port}`);     
+        logger.info(`Server running on http://localhost:${port}`);   
+        console.timeEnd("StartTime");
 
     } catch (err) {
         logger.fatal(`There was an error while running the server:\n${err}`);
