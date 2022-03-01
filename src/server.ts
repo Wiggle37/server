@@ -54,6 +54,7 @@ app.listen(port, async () => {
         await connect();
         logger.info(`Server running on http://localhost:${port}`);
         logger.debug(`Loaded ${routeCount} routes in ${Date.now() - startTimer}ms`);
+        logger.debug("Connecting to database...");
 
     } catch (err) {
         logger.fatal(`There was an error while running the server:\n${err}`);
